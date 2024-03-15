@@ -245,7 +245,7 @@ static const char **    incend;         /* -> active end of incdir  */
 static int          max_inc;            /* Number of incdir[]       */
 
 typedef struct inc_list {       /* List of directories or files     */
-    char *      name;           /* Filename or directory-name       */
+    const char *name;           /* Filename or directory-name       */
     size_t      len;                    /* Length of 'name'         */
 } INC_LIST;
 
@@ -3626,9 +3626,9 @@ static const char *     set_fname(
         if (fnamep->len == fnamelen && str_case_eq( fnamep->name, filename))
             return  filename;           /* Already registered       */
     }
-    fname_end->name = xmalloc( fnamelen + 1);
-    filename = strcpy( fname_end->name, filename);
+    filename = strcpy( xmalloc( fnamelen + 1), filename);
                                 /* Global pointer for get_file()    */
+    fname_end->name = filename;
     fname_end->len = fnamelen;
     fname_end++;
 

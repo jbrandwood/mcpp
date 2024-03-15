@@ -1954,7 +1954,7 @@ static char *   rescan(
                     if (inner->nargs >= 0 && mgc_seq.magic_start) {
                         /* Magic sequence is found between macro */
                         /* name and '('.  This is a nuisance.    */
-                        char *      mgc_cleared;
+                        const char *mgc_cleared;
                         size_t      seq_len;
                         size_t      arg_elen = option_flags.v ? ARG_E_LEN_V
                                             : ARG_E_LEN;
@@ -1977,7 +1977,7 @@ static char *   rescan(
                                     (const char *) infile->bptr, FALSE);
                                         /* Remove pair of magics    */
                             strcpy( infile->bptr, mgc_cleared);
-                            free( mgc_cleared);
+                            free( (void *) mgc_cleared);
                         }
                     }
                 }

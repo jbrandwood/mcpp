@@ -1587,13 +1587,13 @@ int     get_ch( void)
     free( file->buffer);                    /* Free buffer          */
     if (infile == NULL) {                   /* If at end of input   */
         free( file->filename);
-        free( file->src_dir);
+        free( (void *) file->src_dir);
         free( file);    /* full_fname is the same with filename for main file*/
         return  CHAR_EOF;                   /* Return end of file   */
     }
     if (file->fp) {                         /* Source file included */
         free( file->filename);              /* Free filename        */
-        free( file->src_dir);               /* Free src_dir         */
+        free( (void *) file->src_dir);      /* Free src_dir         */
         fclose( file->fp);                  /* Close finished file  */
         /* Do not free file->real_fname and file->full_fname        */
         cur_fullname = infile->full_fname;
@@ -2299,8 +2299,8 @@ FILEINFO *  get_file(
         file->filename = NULL;
     }
     if (src_dir) {
-        file->src_dir = xmalloc( strlen( src_dir) + 1);
-        strcpy( file->src_dir, src_dir);
+        file->src_dir =
+            strcpy( xmalloc( strlen( src_dir) + 1), src_dir);
     } else {
         file->src_dir = NULL;
     }
