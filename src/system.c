@@ -4839,8 +4839,8 @@ static int  mcpp_getopt(
  * Get the next option (and it's argument) from the command line.
  */
 {
-    const char * const   error1 = ": option requires an argument --";
-    const char * const   error2 = ": illegal option --";
+    const char * const   error1 = ": option requires an argument -";
+    const char * const   error2 = ": illegal option -";
     static int      sp = 1;
     int             c;
     const char *    cp;
