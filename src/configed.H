@@ -295,20 +295,7 @@
  * ULONGMAX     should be defined to the ULONG_MAX in <limits.h>.
  */
 
-/* _POSIX_* only to get PATH_MAX    */
-#define _POSIX_             1
-#define _POSIX_SOURCE       1
-#ifndef _POSIX_C_SOURCE
-#define _POSIX_C_SOURCE     1
-#define _POSIX_C_SOURCE_defined     1
-#endif
 #include    "limits.h"
-#undef  _POSIX_
-#undef  _POSIX_SOURCE
-#ifdef  _POSIX_C_SOURCE_defined
-#undef  _POSIX_C_SOURCE
-#undef  _POSIX_C_SOURCE_defined
-#endif
 #define CHARBIT             CHAR_BIT
 #define UCHARMAX            UCHAR_MAX
 #define USHRTMAX            USHRT_MAX
