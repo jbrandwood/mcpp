@@ -26,6 +26,8 @@ special 'post-Standard' mode.
 K&R 1st mode.
 .IP "    \fB-@oldprep, -@old"
 "old_preprocessor" mode (i.e. "Reiser model" cpp).
+.IP "    \fB-@compat"
+Standard 'compatible' mode.
 .IP \fB-C
 Output also comments.
 .IP "\fB-D <macro>[=<value>]"
@@ -41,8 +43,16 @@ Add <directory> to the #include search list.
 Unset system or site specific include directories.
 .IP \fB-j
 Do not output the source line in diagnostics.
+.IP \fB-k
+Keep white spaces of input lines as they are.
 .IP "\fB-M, -MM, -MD, -MMD, -MP, -MQ target, -MT target, -MF file"
 Output source file dependency line for makefile.
+.IP \fB-m32
+Change target CPU from x86_64, ppc64 to i386, ppc, respectively.
+.IP \fB-m64
+Change target CPU from i386, ppc to x86_64, ppc64, respectively.
+.IP \fB-[no-]mmx
+(Un-)define __MMX__.
 .IP \fB-N
 Don't predefine any non-standard macros.
 .IP "\fB-o <file>"

@@ -1418,11 +1418,16 @@ static void usage(
 
 "\nCommonly used options:\n",
 
+#if COMPILER == GNUC
+"-$                           Forbid '$' in identifier.\n",
+"-fno-dollars-in-identifiers  Likewise.\n",
+#endif
 "-@MODE      Specify preprocessing mode. MODE should be one of these 4:\n",
 "    -@std               Standard conforming mode. (default)\n",
 "    -@poststd, -@post   special 'post-Standard' mode.\n",
 "    -@kr                K&R 1st mode.\n",
 "    -@oldprep, -@old    'old_preprocessor' mode (i.e. 'Reiser model' cpp).\n",
+"    -@compat            Standard 'compatible' mode.\n",
 
 #if COMPILER == MSC
 "-arch:SSE, -arch:SSE2   Define the macro _M_IX86_FP as 1, 2 respectively.\n",
@@ -1438,6 +1443,9 @@ static void usage(
 "-C          Output also comments.\n",
 "-D <macro>[=<value>]    Define <macro> as <value> (default:1).\n",
 "-D <macro(args)>[=<replace>]    Define <macro(args)> as <replace>.\n",
+#if COMPILER == GNUC
+"-dM,-dD     Dump all current macro definitions to output stream.\n",
+#endif
 "-e <encoding>   Change the default multi-byte character encoding to one of:\n",
 "            euc_jp, gb2312, ksc5601, big5, sjis, iso2022_jp, utf8.\n",
 
@@ -1447,6 +1455,11 @@ static void usage(
 #if COMPILER == GNUC
 "-finput-charset=<encoding>      Same as -e <encoding>.\n",
 "            (Don't insert spaces around '=').\n",
+"-f[no-]working-directory      (Don't) emit #line marks with current\n",
+"                              working directory.\n",
+"-fstack-protector[-all]       Add defines for GCC stack protector.\n",
+"-f[no-]exceptions             (Don't) add define for exception support.\n",
+"-fpic,-fPIC,-fpie,-fPIE       Add defines for PIC/PIE code.\n"
 #endif
 #if COMPILER == MSC
 "-Fl <file>  Include the <file> prior to the main input file.\n",
@@ -1461,6 +1474,8 @@ static void usage(
 #if COMPILER == GNUC
 "-isysroot <dir>     Change root of system header directory to <dir>.\n",
 "-include <file>     Include the <file> prior to the main input file.\n",
+"-isystem <dir>      Look for include files in DIR, if not found in -I's.\n",
+"-iquote <dir>       Look for #include \"file\" (with quotes) in DIR.\n",
 #else
 "-I-         Unset system or site specific include directories.\n",
 #endif
@@ -1474,6 +1489,7 @@ static void usage(
 #if SYS_FAMILY == SYS_UNIX
 "-m32        Change target CPU from x86_64, ppc64 to i386, ppc, respectively.\n",
 "-m64        Change target CPU from i386, ppc to x86_64, ppc64, respectively.\n",
+"-[no-]mmx   (Un-)define __MMX__.\n",
 #endif
 "-N          Don't predefine any non-standard macros.\n",
 
@@ -1536,7 +1552,10 @@ static void usage(
 
 #if COMPILER == GNUC
 "-lang-c89   Same as -S1.\n",
+"-lang-c99   Same as -S199901L.\n",
+"-lang-c9x   Likewise.\n",
 "-lang-c++   Same as -+.\n",
+"-lang-asm   Same as -a.\n",
 "-pedantic, -pedantic-errors     Same as -W7.\n",
 "-S <n>      Redefine __STDC__ to <n>.\n",
 #else
