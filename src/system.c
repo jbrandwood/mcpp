@@ -3682,6 +3682,7 @@ static char *   search_header_map(
         }
         i = ++i & mask;
     }
+    fclose( fp);
     free( contents);
     return  key_offs ? pathlist : NULL;
 }
