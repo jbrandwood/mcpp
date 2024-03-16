@@ -1561,9 +1561,9 @@ int     get_ch( void)
         if (! in_string && c == '\\' && *file->bptr == '\n'
                 && in_define        /* '\\''\n' is deleted in #define line, */
                     /*   provided the '\\' is not the 2nd byte of mbchar.   */
-                && ! last_is_mbchar( file->buffer, strlen( file->buffer) - 2
+                && ! last_is_mbchar( file->buffer, strlen( file->buffer) - 2)
                 && ! keep_spaces)
-            ) {
+        {
             if (*(file->bptr - 2) == ' ')
                 squeezews = TRUE;
         } else {
