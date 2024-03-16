@@ -447,11 +447,10 @@ fatal_error_exit:
     if (mcpp_debug & MEMORY)
         print_heap();
     if (errors > 0 && option_flags.no_source_line == FALSE) {
-        mcpp_fprintf( ERR, "%d error%s in preprocessor.\n",
+        mcpp_fprintf( ERR, "\n%d error%s in preprocessor.\n",
                 errors, (errors == 1) ? "" : "s");
-        return  IO_ERROR;
     }
-    return  IO_SUCCESS;                             /* No errors    */
+    return  (errors > 0) ? IO_ERROR : IO_SUCCESS;
 }
 
 /*
