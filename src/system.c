@@ -1371,9 +1371,9 @@ static void version( void)
 #endif
 
 #ifdef  VERSION_MSG
-        "MCPP V.2.7.2 (2008/11) "
+        "\nMCPP V.2.7.2 (2008/11) "
 #else
-        "MCPP V.", VERSION, " (", DATE, ") "
+        "\nMCPP V.", VERSION, " (", DATE, ") "
 #endif
 #if     COMPILER == INDEPENDENT
             , "compiler-independent-build "
@@ -1411,7 +1411,7 @@ static void usage(
 {
     const char *     mes[] = {
 
-"Usage:  ",
+"\nUsage:  ",
 "mcpp",
 " [-<opts> [-<opts>]] [<infile> [-<opts>] [<outfile>] [-<opts>]]\n",
 "    <infile> defaults to stdin and <outfile> defaults to stdout.\n",
