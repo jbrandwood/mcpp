@@ -4,9 +4,9 @@ dnl Process this file with autoconf to produce a configure script.
 dnl WARNING: This script does not assume cross-compiling.
 dnl To cross-compile you must edit here and there of this file.
 
-AC_INIT( mcpp, 2.7.2, kmatsui@t3.rim.or.jp)
+AC_INIT([mcpp],[2.7.2],[kmatsui@t3.rim.or.jp])
 AC_CONFIG_SRCDIR( src/main.c)
-AM_CONFIG_HEADER( src/config.h)
+AC_CONFIG_HEADERS( src/config.h)
 AC_CONFIG_AUX_DIR( config)
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE( no-dependencies)
@@ -17,8 +17,7 @@ AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_EGREP
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
+LT_INIT([win32_dll])
 
 dnl WARNING: Configure must check the characteristics of target compiler.
 dnl MCPP may modify the behavior of the target compiler-system.
@@ -86,7 +85,7 @@ esac
 
 ## --enable-replace-cpp option
 AC_ARG_ENABLE( replace-cpp,
-    AC_HELP_STRING( [--enable-replace-cpp],
+    AS_HELP_STRING( [--enable-replace-cpp],
         [Replace the resident preprocessor with mcpp]),
     ,       ## the compiler name will be defined later
     AC_DEFINE( [COMPILER], [INDEPENDENT], [Define the target compiler.])
@@ -101,7 +100,7 @@ if test x$enable_replace_cpp = xyes    \
 ## Enable to build mcpp into cross-compiler of Apple-GCC
 ## --with-target-cc option
 AC_ARG_WITH( target_cc,
-    AC_HELP_STRING( [--with-target-cc],
+    AS_HELP_STRING( [--with-target-cc],
         [Specify the target compiler to build mcpp into on Mac OS X]),
     if test x${withval+set} = xset; then
         target_cc=$withval
@@ -164,21 +163,20 @@ AC_CHECK_FUNCS( [stpcpy])
 
 dnl Checks for some system characteristics.
 
-AC_CACHE_CHECK( if the cases of filename are folded,
-    ac_cv_fname_fold,
+AC_CACHE_CHECK( [if the cases of filename are folded],
+    [ac_cv_fname_fold],
     [touch hJkL
     [ac_cv_fname_fold=no]
-    AC_RUN_IFELSE( [[
+    AC_RUN_IFELSE( [AC_LANG_PROGRAM([[
 #include    <stdio.h>
 #include    <errno.h>
     void exit();
-int main( void)
-{
+]], [[
     if (fopen( "HjKl", "r") == NULL)
         exit( errno);
     else
         exit( 0);
-} ]],
+]])],
         [ac_cv_fname_fold=yes],
         [],
         AC_MSG_WARN( cannot run on cross-compiling so assumes that the cases of filename are not folded.)
@@ -204,23 +202,23 @@ dnl Check printf length modifier of the longest integer.
 AC_DEFUN([AC_CHECK_MOD_LL], [
     AC_CACHE_CHECK( [printf length modifier for the longest integer],
         [ac_cv_c_printf_modifier],
-        AC_RUN_IFELSE( [[
+        AC_RUN_IFELSE( [AC_LANG_PROGRAM([[
 #include    <stdio.h>
 #include    <assert.h>
     int     strcmp();
     void    exit();
 $3
-int main( void)
-{   char    buf@<:@ 20@:>@;
+]], [[
+    char    buf@<:@ 20@:>@;
     $1  num;
     sscanf( "1234567890123456789", "%$2d", &num);
     sprintf( buf, "%$2d", num);
     assert( strcmp( buf, "1234567890123456789") == 0);
     exit( 0);
-} ]],
+]])],
             [ac_cv_c_printf_modifier=$2],
             ,
-            AC_MSG_WARN( cannot run on cross-compiling so assumes the length modifier of long long is "%ll")
+            AC_MSG_WARN( [cannot run on cross-compiling so assumes the length modifier of long long is "%ll"])
             AC_DEFINE( [LL_FORM], "ll",
                 [Define printf length modifier for the longest integer.])
             [ac_cv_c_printf_modifier=ll]
@@ -286,16 +284,16 @@ if test x$ac_cv_c_compiler_gnu = xyes; then
         src_dir=$srcdir
     fi
     if test $ac_c_define_HOST_SYSTEM = SYS_CYGWIN; then
-        AC_CACHE_CHECK( the root directory,
-            ac_cv_cygwin_root,
+        AC_CACHE_CHECK( [the root directory],
+            [ac_cv_cygwin_root],
             [ac_cv_cygwin_root=`$src_dir/config/cygwin_root`]
         )
         AC_DEFINE_UNQUOTED( [CYGWIN_ROOT_DIRECTORY], "$ac_cv_cygwin_root",
             [Define root directory of CYGWIN.])
     fi
     if test $ac_c_define_HOST_SYSTEM = SYS_MINGW; then
-        AC_CACHE_CHECK( the root directory,
-            ac_cv_msys_root,
+        AC_CACHE_CHECK( [the root directory],
+            [ac_cv_msys_root],
             cd /tmp
             cat > getcwd.c <<\_EOF
 #include <stdio.h>
@@ -312,8 +310,8 @@ _EOF
             cd /
             [ac_cv_msys_root=`$src_dir/config/mingw_root`]
         )
-        AC_CACHE_CHECK( the /mingw directory,
-            ac_cv_mingw_dir,
+        AC_CACHE_CHECK( [the /mingw directory],
+            [ac_cv_mingw_dir],
             cd /mingw
             [ac_cv_mingw_dir=`$src_dir/config/mingw_root`]
         )
@@ -358,7 +356,7 @@ AC_DEFUN([mcpp_AC_C_DEFINE], [
 # Specify the target-specific predefined macro via mcpp_AC_C_DEFINE.
 AC_DEFUN([mcpp_AC_C_PREDEF], [
     AC_ARG_ENABLE( $1-$2-macro,
-        AC_HELP_STRING( --enable-$1-$2-macro=name@<:@=replace@:>@,
+        AS_HELP_STRING( [--enable-$1-$2-macro=name@<:@=replace@:>@],
             [specify the $1-specific $2-style predefined macro.  $3]),
         if test x$enableval = xyes || test x$enableval = xno; then
             AC_MSG_ERROR( This option requires an argument as 'name@<:@=replace@:>@'.)
@@ -420,7 +418,7 @@ fi  ## SYS_MAC
 
 ## --enable-mcpplib option
 AC_ARG_ENABLE( mcpplib,
-    AC_HELP_STRING( [--enable-mcpplib],
+    AS_HELP_STRING( [--enable-mcpplib],
         [Build libmcpp rather than stand-alone mcpp])
 )
 
@@ -453,8 +451,8 @@ AC_DEFUN([AC_C_INCLUDE_PREF], [
     )
 ])
 
-AC_CACHE_CHECK( include preference - relative to current or source directory,
-    ac_cv_c_include_pref,
+AC_CACHE_CHECK( [include preference - relative to current or source directory],
+    [ac_cv_c_include_pref],
     mkdir mcpp-tmp
     cd mcpp-tmp
     mkdir dir ../next ../next/dir
@@ -485,11 +483,11 @@ AC_CACHE_CHECK( include preference - relative to current or source directory,
 AC_DEFINE_UNQUOTED( [SEARCH_INIT], $ac_cv_c_include_pref,
     [Define include preference.])
  
-AC_CACHE_CHECK( if the argument of pragma is macro expanded,
-    ac_cv_c_pragma_is_expanded,
-    AC_COMPILE_IFELSE( [[
+AC_CACHE_CHECK( [if the argument of pragma is macro expanded],
+    [ac_cv_c_pragma_is_expanded],
+    AC_COMPILE_IFELSE( [AC_LANG_PROGRAM([[
 #define once
-#pragma once]],
+#pragma once]])],
         [ac_cv_c_pragma_is_expanded=no],
         [ac_cv_c_pragma_is_expanded=yes]
     )
@@ -499,11 +497,11 @@ if test x$ac_cv_c_pragma_is_expanded = xyes; then
         [Define if the argument of pragma is macro expanded.])
 fi
 
-AC_CACHE_CHECK( if digraphs can be used,
-    ac_cv_c_digraph,
-    [AC_PREPROC_IFELSE( [
+AC_CACHE_CHECK( [if digraphs can be used],
+    [ac_cv_c_digraph],
+    [AC_PREPROC_IFELSE( [AC_LANG_PROGRAM([[
 %:if 1
-%:endif],
+%:endif]])],
         [ac_cv_c_digraph=yes],
         [ac_cv_c_digraph=no]
     )]
@@ -512,8 +510,8 @@ if test x$ac_cv_c_digraph = xyes; then
     AC_DEFINE( [HAVE_DIGRAPHS], 1, [Define if digraphs are available.])
 fi
 
-AC_CACHE_CHECK( preprocessor output format of line directive,
-    ac_cv_c_line_format,
+AC_CACHE_CHECK( [preprocessor output format of line directive],
+    [ac_cv_c_line_format],
     [ac_cv_c_line_format=\"`echo '#line 4321' | $CPP - | grep 432 | sed 's/432.*$//'`\"]
 ## Note: the output line number may be 4320 on GCC 2.* or other preprocessors.
 )
@@ -527,8 +525,8 @@ fi
 AC_DEFINE_UNQUOTED( [STD_LINE_PREFIX], $ac_cv_c_std_line_prefix,
     [Define whether output format of line directive is C source style.])
 
-AC_CACHE_CHECK( default value of __STDC__,
-    ac_cv_c_stdc,
+AC_CACHE_CHECK( [default value of __STDC__],
+    [ac_cv_c_stdc],
     [stdc=`echo '__STDC__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ .*//'`]
     if test x"$stdc" = x"__STDC__"; then
         [ac_cv_c_stdc=0]
@@ -539,8 +537,8 @@ AC_CACHE_CHECK( default value of __STDC__,
 AC_DEFINE_UNQUOTED( [STDC], $ac_cv_c_stdc,
     [Define the default value of __STDC__.])
 
-AC_CACHE_CHECK( default value of __STDC_VERSION__,
-    ac_cv_c_stdc_ver,
+AC_CACHE_CHECK( [default value of __STDC_VERSION__],
+    [ac_cv_c_stdc_ver],
     [stdc_ver=`echo '__STDC_VERSION__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ .*//'`]
     if test x"$stdc_ver" = x"__STDC_VERSION__"; then
         [ac_cv_c_stdc_ver=0]
@@ -555,7 +553,7 @@ if test x${ac_cv_c_compiler_gnu} != xyes; then
 
 # Specify the compiler's name
 AC_ARG_WITH( compiler-name,
-    AC_HELP_STRING( [--with-compiler-name=NAME],
+    AS_HELP_STRING( [--with-compiler-name=NAME],
         [specify the compiler name which is used as the definition of COMPILER macro]),
     AC_DEFINE_UNQUOTED( [COMPILER], $compiler_name, [specify the compiler name]),
     AC_MSG_ERROR( --with-compiler-name=NAME option should be specified to define [COMPILER] macro.)
@@ -563,7 +561,7 @@ AC_ARG_WITH( compiler-name,
 
 # Specify the C++ header file directory
 AC_ARG_WITH( cxx-include-dir,
-    AC_HELP_STRING( [--with-cxx-include-dir=directory],
+    AS_HELP_STRING( [--with-cxx-include-dir=directory],
         [specify the C++ include directory by absolute path [[none]]]),
     [case "${withval}" in
     [\\/]* | [A-Za-z]:[\\/]*)
@@ -710,25 +708,25 @@ if test x$ac_cv_c_compiler_gnu = xyes; then
 
     if test x$gcc_maj_ver = x2; then
 
-        AC_CACHE_CHECK( for value of predefined macro '__SIZE_TYPE__',
-            size_type,
-            [size_type=`echo '__SIZE_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *//'`]
+        AC_CACHE_CHECK( [for value of predefined macro '__SIZE_TYPE__'],
+            [ac_cv_size_type],
+            [ac_cv_size_type=`echo '__SIZE_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *//'`]
         )
-        AC_DEFINE_UNQUOTED( [COMPILER_SP1_VAL], "$size_type",
+        AC_DEFINE_UNQUOTED( [COMPILER_SP1_VAL], "$ac_cv_size_type",
             [Define the type of size_t.])
 
-        AC_CACHE_CHECK( for value of predefined macro '__PTRDIFF_TYPE__',
-            ptrdiff_type,
-            [ptrdiff_type=`echo '__PTRDIFF_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *$//'`]
+        AC_CACHE_CHECK( [for value of predefined macro '__PTRDIFF_TYPE__'],
+            [ac_cv_ptrdiff_type],
+            [ac_cv_ptrdiff_type=`echo '__PTRDIFF_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *$//'`]
         )
-        AC_DEFINE_UNQUOTED( [COMPILER_SP2_VAL], "$ptrdiff_type",
+        AC_DEFINE_UNQUOTED( [COMPILER_SP2_VAL], "$ac_cv_ptrdiff_type",
             [Define the type of ptrdiff_t.])
 
-        AC_CACHE_CHECK( for value of predefined macro '__WCHAR_TYPE__',
-            wchar_type,
-            [wchar_type=`echo '__WCHAR_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *$//'`]
+        AC_CACHE_CHECK( [for value of predefined macro '__WCHAR_TYPE__'],
+            [ac_cv_wchar_type],
+            [ac_cv_wchar_type=`echo '__WCHAR_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *$//'`]
         )
-        AC_DEFINE_UNQUOTED( [COMPILER_SP3_VAL], "$wchar_type",
+        AC_DEFINE_UNQUOTED( [COMPILER_SP3_VAL], "$ac_cv_wchar_type",
         [Define the type of wchar_t.])
 
     fi
@@ -750,7 +748,7 @@ fi ## replace-cpp mode
 fi ## build-cpp mode or replace-cpp mode
 
 AC_ARG_WITH( [gcc-testsuite-dir],
-    AC_HELP_STRING( [--with-gcc-testsuite-dir=directory],
+    AS_HELP_STRING( [--with-gcc-testsuite-dir=directory],
         [specify the gcc testsuite directory to do make check.
         e.g. /usr/src/rpm/SOURCES/gcc-2.95.4/gcc/testsuite,
         /usr/local/src/gcc-3.2/gcc/testsuite, etc.
@@ -775,4 +773,5 @@ AM_CONDITIONAL( [MINGW], test $ac_c_define_HOST_SYSTEM = SYS_MINGW)
 
 dnl Final output.
 
-AC_OUTPUT( Makefile src/Makefile tests/Makefile)
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile])
+AC_OUTPUT
