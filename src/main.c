@@ -428,17 +428,14 @@ int     main
 
 fatal_error_exit:
 #if MCPP_LIB
-    /* Free malloced memory */
-    if (mcpp_debug & MACRO_CALL) {
-        if (in_file != stdin_name)
-            free( in_file);
-    }
     clear_filelist();
     clear_symtable();
 #endif
 
-    if (fp_in && fp_in != stdin)
+    if (fp_in && fp_in != stdin) {
         fclose( fp_in);
+        free( in_file);                 /* Allocated in norm_path() */
+    }
     if (fp_out && fp_out != stdout)
         fclose( fp_out);
     if (fp_err && fp_err != stderr)
