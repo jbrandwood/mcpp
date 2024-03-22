@@ -1946,6 +1946,11 @@ static char *   get_line(
             dump_string( NULL, ptr);
         }
         len = strlen( ptr);
+        if (len == 0) {
+                cerror( "Skipping line that begins with '\\0'", NULL, 0L, NULL);
+                continue;
+	}
+
         if (NBUFF - 1 <= ptr - infile->buffer + len
                 && *(ptr + len - 1) != '\n') {
                 /* The line does not yet end, though the buffer is full.    */
