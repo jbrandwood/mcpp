@@ -1747,9 +1747,11 @@ not_comment:
                     *tp++ = '\t';
                 else
                     *tp++ = ' ';            /* Convert to ' '       */
-            } else if (! (char_type[ *(tp - 1) & UCHARMAX] & HSP)) {
+            } else if (temp == tp
+                       || ! (char_type[ *(tp - 1) & UCHARMAX] & HSP)) {
                 *tp++ = ' ';                /* Squeeze white spaces */
-            } else if (mcpp_mode == OLD_PREP && *(tp - 1) == COM_SEP) {
+            } else if (mcpp_mode == OLD_PREP
+                       && temp < tp && *(tp - 1) == COM_SEP) {
                 *(tp - 1) = ' ';    /* Replace COM_SEP with ' '     */
             }
             break;
