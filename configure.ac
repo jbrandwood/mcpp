@@ -151,7 +151,7 @@ fi
 
 dnl Checks for header files.
 
-AC_CHECK_HEADERS( [unistd.h, stdint.h, inttypes.h])
+AC_CHECK_HEADERS( [unistd.h stdint.h inttypes.h])
 
 dnl Checks for typedefs, and compiler characteristics.
 
