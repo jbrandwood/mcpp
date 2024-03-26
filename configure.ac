@@ -167,16 +167,16 @@ AC_CACHE_CHECK( [if the cases of filename are folded],
     [ac_cv_fname_fold],
     [touch hJkL
     [ac_cv_fname_fold=no]
-    AC_RUN_IFELSE( [AC_LANG_PROGRAM([[
+    AC_RUN_IFELSE( [AC_LANG_PROGRAM([
 #include    <stdio.h>
 #include    <errno.h>
     void exit();
-]], [[
+],[
     if (fopen( "HjKl", "r") == NULL)
         exit( errno);
     else
         exit( 0);
-]])],
+])],
         [ac_cv_fname_fold=yes],
         [],
         AC_MSG_WARN( cannot run on cross-compiling so assumes that the cases of filename are not folded.)
@@ -202,20 +202,20 @@ dnl Check printf length modifier of the longest integer.
 AC_DEFUN([AC_CHECK_MOD_LL], [
     AC_CACHE_CHECK( [printf length modifier for the longest integer],
         [ac_cv_c_printf_modifier],
-        AC_RUN_IFELSE( [AC_LANG_PROGRAM([[
+        AC_RUN_IFELSE( [AC_LANG_PROGRAM([
 #include    <stdio.h>
 #include    <assert.h>
     int     strcmp();
     void    exit();
 $3
-]], [[
+],[
     char    buf@<:@ 20@:>@;
     $1  num;
     sscanf( "1234567890123456789", "%$2d", &num);
     sprintf( buf, "%$2d", num);
     assert( strcmp( buf, "1234567890123456789") == 0);
     exit( 0);
-]])],
+])],
             [ac_cv_c_printf_modifier=$2],
             ,
             AC_MSG_WARN( [cannot run on cross-compiling so assumes the length modifier of long long is "%ll"])
@@ -485,9 +485,10 @@ AC_DEFINE_UNQUOTED( [SEARCH_INIT], $ac_cv_c_include_pref,
  
 AC_CACHE_CHECK( [if the argument of pragma is macro expanded],
     [ac_cv_c_pragma_is_expanded],
-    AC_COMPILE_IFELSE( [AC_LANG_PROGRAM([[
+    AC_COMPILE_IFELSE( [AC_LANG_PROGRAM([
 #define once
-#pragma once]])],
+#pragma once
+])],
         [ac_cv_c_pragma_is_expanded=no],
         [ac_cv_c_pragma_is_expanded=yes]
     )
@@ -499,9 +500,10 @@ fi
 
 AC_CACHE_CHECK( [if digraphs can be used],
     [ac_cv_c_digraph],
-    [AC_PREPROC_IFELSE( [AC_LANG_PROGRAM([[
+    [AC_PREPROC_IFELSE( [AC_LANG_PROGRAM([
 %:if 1
-%:endif]])],
+%:endif
+])],
         [ac_cv_c_digraph=yes],
         [ac_cv_c_digraph=no]
     )]
@@ -709,24 +711,24 @@ if test x$ac_cv_c_compiler_gnu = xyes; then
     if test x$gcc_maj_ver = x2; then
 
         AC_CACHE_CHECK( [for value of predefined macro '__SIZE_TYPE__'],
-            [ac_cv_size_type],
-            [ac_cv_size_type=`echo '__SIZE_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *//'`]
+            [mcpp_cv_size_type],
+            [mcpp_cv_size_type=`echo '__SIZE_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *//'`]
         )
-        AC_DEFINE_UNQUOTED( [COMPILER_SP1_VAL], "$ac_cv_size_type",
+        AC_DEFINE_UNQUOTED( [COMPILER_SP1_VAL], "$mcpp_cv_size_type",
             [Define the type of size_t.])
 
         AC_CACHE_CHECK( [for value of predefined macro '__PTRDIFF_TYPE__'],
-            [ac_cv_ptrdiff_type],
-            [ac_cv_ptrdiff_type=`echo '__PTRDIFF_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *$//'`]
+            [mcpp_cv_ptrdiff_type],
+            [mcpp_cv_ptrdiff_type=`echo '__PTRDIFF_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *$//'`]
         )
-        AC_DEFINE_UNQUOTED( [COMPILER_SP2_VAL], "$ac_cv_ptrdiff_type",
+        AC_DEFINE_UNQUOTED( [COMPILER_SP2_VAL], "$mcpp_cv_ptrdiff_type",
             [Define the type of ptrdiff_t.])
 
         AC_CACHE_CHECK( [for value of predefined macro '__WCHAR_TYPE__'],
-            [ac_cv_wchar_type],
-            [ac_cv_wchar_type=`echo '__WCHAR_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *$//'`]
+            [mcpp_cv_wchar_type],
+            [mcpp_cv_wchar_type=`echo '__WCHAR_TYPE__' | $CPP - | sed 's/^ *//' | $EGREP -v '^#|^$' | sed 's/ *$//'`]
         )
-        AC_DEFINE_UNQUOTED( [COMPILER_SP3_VAL], "$ac_cv_wchar_type",
+        AC_DEFINE_UNQUOTED( [COMPILER_SP3_VAL], "$mcpp_cv_wchar_type",
         [Define the type of wchar_t.])
 
     fi
