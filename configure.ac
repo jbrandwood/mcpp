@@ -5,6 +5,7 @@ dnl WARNING: This script does not assume cross-compiling.
 dnl To cross-compile you must edit here and there of this file.
 
 AC_INIT([mcpp],[2.7.2],[kmatsui@t3.rim.or.jp])
+LT_INIT([win32-dll])
 AC_CONFIG_SRCDIR( src/main.c)
 AC_CONFIG_HEADERS( src/config.h)
 AC_CONFIG_AUX_DIR( config)
@@ -17,7 +18,6 @@ AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_EGREP
-LT_INIT([win32_dll])
 
 dnl WARNING: Configure must check the characteristics of target compiler.
 dnl MCPP may modify the behavior of the target compiler-system.
