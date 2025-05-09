@@ -105,9 +105,6 @@
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
-/* Define to 1 if you have the <stdint.h,> header file. */
-#undef HAVE_STDINT_H_
-
 /* Define to 1 if you have the <stdio.h> header file. */
 #undef HAVE_STDIO_H
 
@@ -131,9 +128,6 @@
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
-
-/* Define to 1 if you have the <unistd.h,> header file. */
-#undef HAVE_UNISTD_H_
 
 /* Define the host compiler name. */
 #undef HOST_CMP_NAME
