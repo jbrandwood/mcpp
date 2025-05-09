@@ -204,9 +204,9 @@ AC_DEFUN([AC_CHECK_MOD_LL], [
         [ac_cv_c_printf_modifier],
         AC_RUN_IFELSE( [AC_LANG_PROGRAM([
 #include    <stdio.h>
+#include    <stdlib.h>
+#include    <string.h>
 #include    <assert.h>
-    int     strcmp();
-    void    exit();
 $3
 ],[
     char    buf@<:@ 20@:>@;
