@@ -372,22 +372,22 @@ const char *    set_encoding(
              * and lowered.
              */
 
-    if (strlen( name) >= NAMLEN) {
+    size_t  namelen = strlen( name);
+    if (namelen >= NAMLEN) {
         if ((env || pragma) && (warn_level & 1)) {
             cwarn( too_long, name, 0L, NULL);
         } else {
             mcpp_fprintf( ERR, too_long, name);
             mcpp_fputc( '\n', ERR);
         }
+        return  NULL;
     }
-    strcpy( norm, name);
-    if (norm[ 5] == '.')
-        memmove( norm, norm + 5, strlen( norm + 5) + 1);
-        /* Remove initial 'xxxxx.' as 'ja_JP.', 'en_US.' or any other   */
+    /* Remove initial 'xxxxx.' as 'ja_JP.', 'en_US.' or any other   */
+    strcpy( norm, (namelen >= 6 && name[ 5] == '.') ? name + 5 : name);
     conv_case( norm, norm + strlen( norm), LOWER);
     strip_bar( norm);
 
-    if (strlen( name) == 0) {                       /* ""       */
+    if (namelen == 0) {                             /* ""       */
         mbchar = MBCHAR;    /* Restore to the default encoding  */
     } else if (memcmp( norm, "iso8859", 7) == 0     /* iso8859* */
             || memcmp( norm, "latin", 5) == 0       /* latin*   */
